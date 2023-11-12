@@ -43,6 +43,7 @@ jobs:
     name: Push Docker image to DockerHub
     runs-on: ubuntu-latest
     needs: tests
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -62,19 +63,16 @@ jobs:
 
   frontend_tests:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up nodeJS
       uses: actions/setup-node@v3
       with:
         node-version: 18
-
     - name: Install dependencies
       run: |
         cd frontend/
         npm ci
-
     - name: Test frontend
       run: |
         cd frontend/
@@ -129,7 +127,6 @@ jobs:
       - build_and_push_to_docker_hub
       - build_frontend_and_push_to_docker_hub
       - build_gateway_and_push_to_docker_hub
-    if: github.ref == 'refs/heads/master'
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
